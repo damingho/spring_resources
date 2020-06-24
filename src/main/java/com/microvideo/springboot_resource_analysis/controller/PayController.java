@@ -1,13 +1,17 @@
 package com.microvideo.springboot_resource_analysis.controller;
  
+import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.microvideo.springboot_resource_analysis.config.AlipayConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
- 
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * @ProjectName: lnsf2019_project
  * @Package: com.lnsf.payment.controller
@@ -17,8 +21,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date: 2019/7/30 9:49
  * @Version: 1.0
  */
-@Controller
+@RestController
 public class PayController {
+
+    @RequestMapping("userInfos")
+    public String userInfos() {
+        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);
+
+        AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();
+        request.setCode("2e4248c2f50b4653bf18ecee3466UC18");
+        request.setGrantType("authorization_code");
+        try {
+            AlipaySystemOauthTokenResponse oauthTokenResponse = alipayClient.execute(request);
+            System.out.println(oauthTokenResponse.getAccessToken());
+            return "调用成功";
+        } catch (AlipayApiException e) {
+            //处理异常
+            e.printStackTrace();
+        }
+        return "调用失败";
+    }
  
     @RequestMapping("/toPay")
     @ResponseBody
