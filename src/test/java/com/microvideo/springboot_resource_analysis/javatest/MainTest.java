@@ -5,8 +5,10 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePayRequest;
 import com.alipay.api.request.AlipayUserCertifyOpenInitializeRequest;
+import com.alipay.api.request.ZhimaCustomerEpCertificationInitializeRequest;
 import com.alipay.api.response.AlipayTradePayResponse;
 import com.alipay.api.response.AlipayUserCertifyOpenInitializeResponse;
+import com.alipay.api.response.ZhimaCustomerEpCertificationInitializeResponse;
 import com.google.common.base.Joiner;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,15 +28,16 @@ public class MainTest {
     public static void main(String[] args) throws AlipayApiException {
 
         AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipaydev.com/gateway.do","2016102500756368",privateKey,"json","GBK",publicKey,"RSA2");
-        AlipayTradePayRequest request = new AlipayTradePayRequest();
+        ZhimaCustomerEpCertificationInitializeRequest request = new ZhimaCustomerEpCertificationInitializeRequest();
         request.setBizContent("{" +
-                "\"out_trade_no\":\"1592895760993\"," +
-                "\"scene\":\"bar_code\"," +
-                "\"auth_code\":\"28763443825664394\"," +
-                "\"product_code\":\"FACE_TO_FACE_PAYMENT\"," +
-                "\"subject\":\"Iphone6 16G\"" +
-                "  }");
-        AlipayTradePayResponse response = alipayClient.execute(request);
+                "\"transaction_id\":\"ZGYD201610252323000001234\"," +
+                "\"product_code\":\"w1010100003000001889\"," +
+                "\"biz_code\":\"EP_ALIPAY_ACCOUNT\"," +
+                "\"identity_param\":\"{\\\"identity_type\\\":\\\"EP_CERT_INFO\\\",\\\"cert_type\\\":\\\"IDENTITY_CARD\\\",\\\"cert_name\\\":\\\"收委\\\",\\\"cert_no\\\":\\\"260104197909275964\\\"}\"," +
+                "\"merchant_config\":\"{\\\"xxx\\\":\\\"xxx\\\"}\"," +
+                "\"ext_biz_param\":\"{}\"" +
+                "}");
+        ZhimaCustomerEpCertificationInitializeResponse response = alipayClient.execute(request);
         if(response.isSuccess()){
             System.out.println("调用成功");
         } else {
